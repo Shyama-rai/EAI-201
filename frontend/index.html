@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Navigator - AI Pathfinding System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>
+                <span class="icon">🧭</span>
+                Campus Navigator
+            </h1>
+            <p class="subtitle">AI-Powered Pathfinding System for Smart Campus Navigation</p>
+        </header>
+
+        <div class="main-content">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <h3>Navigation Settings</h3>
+                    
+                    <div class="input-group">
+                        <label for="startLocation">Start Location:</label>
+                        <select id="startLocation" class="location-select">
+                            <option value="">Select starting point...</option>
+                            <option value="main-gate">🚪 Main Gate</option>
+                            <option value="admin">🏢 Admin Building</option>
+                            <option value="library">📚 Library</option>
+                            <option value="ac-block-a">🏫 AC Block A</option>
+                            <option value="ac-block-b">🏫 AC Block B</option>
+                            <option value="ac-block-c">🏫 AC Block C</option>
+                            <option value="connecting-point">🔗 Connecting Point</option>
+                            <option value="laundry">🧺 Laundry</option>
+                            <option value="food-court">🍽️ Food Court</option>
+                            <option value="hostel-1">🏠 Hostel 1</option>
+                            <option value="sports-arena">🏟️ Sports Arena</option>
+                            <option value="volleyball-court">🏐 Volleyball Court</option>
+                            <option value="cricket-ground">🏏 Cricket Ground</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="endLocation">End Location:</label>
+                        <select id="endLocation" class="location-select">
+                            <option value="">Select destination...</option>
+                            <option value="main-gate">🚪 Main Gate</option>
+                            <option value="admin">🏢 Admin Building</option>
+                            <option value="library">📚 Library</option>
+                            <option value="ac-block-a">🏫 AC Block A</option>
+                            <option value="ac-block-b">🏫 AC Block B</option>
+                            <option value="ac-block-c">🏫 AC Block C</option>
+                            <option value="connecting-point">🔗 Connecting Point</option>
+                            <option value="laundry">🧺 Laundry</option>
+                            <option value="food-court">🍽️ Food Court</option>
+                            <option value="hostel-1">🏠 Hostel 1</option>
+                            <option value="sports-arena">🏟️ Sports Arena</option>
+                            <option value="volleyball-court">🏐 Volleyball Court</option>
+                            <option value="cricket-ground">🏏 Cricket Ground</option>
+                        </select>
+                    </div>
+
+                    <button id="findPathBtn" class="find-path-btn">
+                        <span class="btn-icon">🧭</span>
+                        Find Optimal Route
+                    </button>
+
+                    <button id="clearPathBtn" class="clear-path-btn">
+                        <span class="btn-icon">🗑️</span>
+                        Clear Path
+                    </button>
+                </div>
+
+                <div class="algorithm-info">
+                    <h3>🤖 AI Algorithm Selection</h3>
+                    <div id="algorithmDetails" class="algorithm-details">
+                        <p>🎯 Our AI automatically selects the best pathfinding algorithm based on your route characteristics, ensuring optimal performance and accuracy.</p>
+                        <div class="auto-selection-features">
+                            <div class="feature">
+                                <span class="feature-icon">⚡</span>
+                                <span>Smart Algorithm Detection</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-icon">�</span>
+                                <span>Performance Metrics</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-icon">🎯</span>
+                                <span>Optimized Results</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-panel">
+                <div class="map-container">
+                    <svg id="campusMap" viewBox="0 0 800 1000" class="campus-svg">
+                        <!-- Campus Map Background -->
+                        <rect width="800" height="1000" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+                        
+                        <!-- Title -->
+                        <text x="400" y="30" text-anchor="middle" class="map-title">Campus Map</text>
+                        
+                        <!-- Locations (Nodes) with Icons -->
+                        <g class="nodes">
+                            <!-- Main Gate -->
+                            <circle id="node-main-gate" cx="400" cy="80" r="15" class="node entrance" data-location="main-gate"/>
+                            <text x="400" y="86" text-anchor="middle" class="node-icon">🚪</text>
+                            <text x="400" y="60" text-anchor="middle" class="node-label">Main Gate</text>
+                            
+                            <!-- Admin -->
+                            <circle id="node-admin" cx="400" cy="200" r="15" class="node building" data-location="admin"/>
+                            <text x="400" y="206" text-anchor="middle" class="node-icon">🏢</text>
+                            <text x="400" y="180" text-anchor="middle" class="node-label">Admin Building</text>
+                            
+                            <!-- Library -->
+                            <circle id="node-library" cx="550" cy="200" r="15" class="node building" data-location="library"/>
+                            <text x="550" y="206" text-anchor="middle" class="node-icon">📚</text>
+                            <text x="550" y="180" text-anchor="middle" class="node-label">Library</text>
+                            
+                            <!-- Connecting Point -->
+                            <circle id="node-connecting-point" cx="400" cy="320" r="15" class="node junction" data-location="connecting-point"/>
+                            <text x="400" y="326" text-anchor="middle" class="node-icon">🔗</text>
+                            <text x="400" y="300" text-anchor="middle" class="node-label">Connecting Point</text>
+                            
+                            <!-- AC Block A -->
+                            <circle id="node-ac-block-a" cx="250" cy="320" r="15" class="node building" data-location="ac-block-a"/>
+                            <text x="250" y="326" text-anchor="middle" class="node-icon">🏫</text>
+                            <text x="250" y="300" text-anchor="middle" class="node-label">AC Block A</text>
+                            
+                            <!-- AC Block C -->
+                            <circle id="node-ac-block-c" cx="550" cy="320" r="15" class="node building" data-location="ac-block-c"/>
+                            <text x="550" y="326" text-anchor="middle" class="node-icon">🏫</text>
+                            <text x="550" y="300" text-anchor="middle" class="node-label">AC Block C</text>
+                            
+                            <!-- AC Block B -->
+                            <circle id="node-ac-block-b" cx="400" cy="480" r="15" class="node building" data-location="ac-block-b"/>
+                            <text x="400" y="486" text-anchor="middle" class="node-icon">🏫</text>
+                            <text x="400" y="460" text-anchor="middle" class="node-label">AC Block B</text>
+                            
+                            <!-- Laundry -->
+                            <circle id="node-laundry" cx="300" cy="620" r="15" class="node facility" data-location="laundry"/>
+                            <text x="300" y="626" text-anchor="middle" class="node-icon">🧺</text>
+                            <text x="300" y="600" text-anchor="middle" class="node-label">Laundry</text>
+                            
+                            <!-- Food Court -->
+                            <circle id="node-food-court" cx="400" cy="650" r="15" class="node facility" data-location="food-court"/>
+                            <text x="400" y="656" text-anchor="middle" class="node-icon">🍽️</text>
+                            <text x="400" y="630" text-anchor="middle" class="node-label">Food Court</text>
+                            
+                            <!-- Hostel 1 -->
+                            <circle id="node-hostel-1" cx="150" cy="750" r="15" class="node residential" data-location="hostel-1"/>
+                            <text x="150" y="756" text-anchor="middle" class="node-icon">🏠</text>
+                            <text x="150" y="730" text-anchor="middle" class="node-label">Hostel 1</text>
+                            
+                            <!-- Sports Arena -->
+                            <circle id="node-sports-arena" cx="400" cy="800" r="15" class="node sports" data-location="sports-arena"/>
+                            <text x="400" y="806" text-anchor="middle" class="node-icon">🏟️</text>
+                            <text x="400" y="780" text-anchor="middle" class="node-label">Sports Arena</text>
+                            
+                            <!-- Volleyball Court -->
+                            <circle id="node-volleyball-court" cx="250" cy="920" r="15" class="node sports" data-location="volleyball-court"/>
+                            <text x="250" y="926" text-anchor="middle" class="node-icon">🏐</text>
+                            <text x="250" y="900" text-anchor="middle" class="node-label">Volleyball Court</text>
+                            
+                            <!-- Cricket Ground -->
+                            <circle id="node-cricket-ground" cx="550" cy="920" r="15" class="node sports" data-location="cricket-ground"/>
+                            <text x="550" y="926" text-anchor="middle" class="node-icon">🏏</text>
+                            <text x="550" y="900" text-anchor="middle" class="node-label">Cricket Ground</text>
+                        </g>
+                        
+                        <!-- Edges (Paths) -->
+                        <g class="edges">
+                            <!-- Main Gate to Admin (180m) -->
+                            <line x1="400" y1="92" x2="400" y2="188" class="edge" data-distance="180"/>
+                            <text x="420" y="140" class="distance-label">180m</text>
+                            
+                            <!-- Admin to Library (80m) -->
+                            <line x1="412" y1="200" x2="538" y2="200" class="edge" data-distance="80"/>
+                            <text x="475" y="215" class="distance-label">80m</text>
+                            
+                            <!-- Admin to Connecting Point (80m) -->
+                            <line x1="400" y1="212" x2="400" y2="308" class="edge" data-distance="80"/>
+                            <text x="420" y="260" class="distance-label">80m</text>
+                            
+                            <!-- Connecting Point to AC Block A (60m) -->
+                            <line x1="388" y1="320" x2="262" y2="320" class="edge" data-distance="60"/>
+                            <text x="325" y="335" class="distance-label">60m</text>
+                            
+                            <!-- Connecting Point to AC Block C (60m) -->
+                            <line x1="412" y1="320" x2="538" y2="320" class="edge" data-distance="60"/>
+                            <text x="475" y="335" class="distance-label">60m</text>
+                            
+                            <!-- Connecting Point to AC Block B (60m) -->
+                            <line x1="400" y1="332" x2="400" y2="468" class="edge" data-distance="60"/>
+                            <text x="420" y="400" class="distance-label">60m</text>
+                            
+                            <!-- AC Block B to Food Court (200m) -->
+                            <line x1="400" y1="492" x2="400" y2="638" class="edge" data-distance="200"/>
+                            <text x="420" y="565" class="distance-label">200m</text>
+                            
+                            <!-- Food Court to Laundry (30m) -->
+                            <line x1="388" y1="640" x2="312" y2="630" class="edge" data-distance="30"/>
+                            <text x="340" y="625" class="distance-label">30m</text>
+                            
+                            <!-- Laundry to Hostel 1 (260m) -->
+                            <line x1="288" y1="630" x2="162" y2="740" class="edge" data-distance="260"/>
+                            <text x="200" y="690" class="distance-label">260m</text>
+                            
+                            <!-- Food Court to Sports Arena (280m) -->
+                            <line x1="400" y1="662" x2="400" y2="788" class="edge" data-distance="280"/>
+                            <text x="420" y="725" class="distance-label">280m</text>
+                            
+                            <!-- Hostel 1 to Sports Arena (500m) -->
+                            <line x1="162" y1="750" x2="388" y2="800" class="edge" data-distance="500"/>
+                            <text x="270" y="770" class="distance-label">500m</text>
+                            
+                            <!-- Sports Arena to Volleyball Court (485m) -->
+                            <line x1="388" y1="810" x2="262" y2="910" class="edge" data-distance="485"/>
+                            <text x="300" y="870" class="distance-label">485m</text>
+                            
+                            <!-- Sports Arena to Cricket Ground (485m) -->
+                            <line x1="412" y1="810" x2="538" y2="910" class="edge" data-distance="485"/>
+                            <text x="500" y="870" class="distance-label">485m</text>
+                        </g>
+                        
+                        <!-- Path highlighting will be added dynamically -->
+                        <g id="pathHighlight" class="path-highlight"></g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-panel">
+            <div id="pathResults" class="path-results hidden">
+                <h3>🎯 Route Analysis Results</h3>
+                <div class="result-content">
+                    <div class="result-grid">
+                        <div class="result-item primary">
+                            <span class="result-label">🤖 AI Selected Algorithm:</span>
+                            <span id="resultAlgorithm" class="result-value">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">📏 Total Distance:</span>
+                            <span id="resultDistance" class="result-value">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">👣 Number of Steps:</span>
+                            <span id="resultSteps" class="result-value">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">🔍 Nodes Explored:</span>
+                            <span id="resultNodesExplored" class="result-value">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">⚡ Computation Time:</span>
+                            <span id="resultComputationTime" class="result-value">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">🕐 Total Execution Time:</span>
+                            <span id="resultTotalTime" class="result-value">-</span>
+                        </div>
+                    </div>
+                    <div class="result-reasoning">
+                        <span class="result-label">💡 Algorithm Selection Reasoning:</span>
+                        <p id="resultReasoning" class="reasoning-text">-</p>
+                    </div>
+                    <div class="result-path-section">
+                        <span class="result-label">🗺️ Optimal Route Path:</span>
+                        <div id="resultPath" class="path-sequence">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
